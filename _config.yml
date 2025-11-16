@@ -4,7 +4,7 @@ author: Alistair Israel
 url: "https://yaml-schema.net"
 baseurl: ""
 
-theme: just-the-docs
+remote_theme: just-the-docs/just-the-docs
 
 # Exclude from processing
 exclude:
