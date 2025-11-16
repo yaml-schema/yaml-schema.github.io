@@ -1,0 +1,13 @@
+title: YAML Schema
+description: YAML Schema allows you validate YAML documents against a YAML schema.
+author: Alistair Israel
+url: "https://yaml-schema.net"
+baseurl: ""
+
+theme: just-the-docs
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - yaml-schema.yaml
