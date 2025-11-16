@@ -10,4 +10,3 @@ remote_theme: just-the-docs/just-the-docs
 exclude:
   - Gemfile
   - Gemfile.lock
-  - yaml-schema.yaml
