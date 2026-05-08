@@ -7,26 +7,31 @@ has_children: true
 
 # Features
 
-YAML Schema provides comprehensive validation capabilities for YAML documents. This section covers all the features available in the YAML Schema specification.
+This section documents validation and schema keywords supported by YAML Schema and the `ys` CLI. For the normative keyword set, see the published schema at [yaml-schema.yaml](https://yaml-schema.net/yaml-schema.yaml).
 
-## Core Features
-- **[CLI](cli.md)** - Command-line interface usage
-- **[Basics](basics.md)** - Fundamental schema concepts including empty schemas, boolean schemas, and type validation
-- **[Types](types.md)** - Support for all YAML types: strings, numbers, integers, booleans, nulls, arrays, and objects
-- **[Validation](validation.md)** - Validation constraints including enums, constants, length, range, and pattern matching
-- **[Composition](composition.md)** - Schema composition with `allOf`, `anyOf`, `oneOf`, and `not`
-- **[Multiple Types](multiple-types.md)** - Support for multiple type values
-- **[References](references.md)** - Reusable schema definitions with `$defs` and `$ref`
+## Topics
 
-## Type System
+- **[CLI](cli.md)** — Command-line usage, instance `$schema`, JSON errors
+- **[Basics](basics.md)** — Empty schemas, boolean schemas, basic types
+- **[Types](types.md)** — Strings (including Unicode length), numbers, arrays, objects, etc.
+- **[String formats](formats.md)** — `format` for dates, times, email, URI, UUID, and custom labels
+- **[Validation](validation.md)** — Enums, `const`, descriptions, shared constraint examples
+- **[Composition](composition.md)** — `allOf`, `anyOf`, `oneOf`, `not`
+- **[Multiple types](multiple-types.md)** — `type: [string, number]` style unions
+- **[Conditionals](conditionals.md)** — `dependentRequired`, `dependentSchemas`, `if` / `then` / `else`
+- **[Unevaluated keywords](unevaluated.md)** — `unevaluatedProperties`, `unevaluatedItems`
+- **[References](references.md)** — `$defs`, `$ref`, external resolution, circular refs
 
-YAML Schema supports the following types:
-- `string` - Text values
-- `number` - Numeric values (integers and floats)
-- `integer` - Whole numbers
-- `boolean` - True/false values
-- `null` - Null values
-- `array` - Ordered lists
-- `object` - Key-value mappings
+## Type system
 
-Each type can be combined with validation constraints to create precise schemas for your YAML documents.
+YAML Schema supports these types:
+
+- `string` — Text values
+- `number` — Numeric values (integers and floats)
+- `integer` — Whole numbers
+- `boolean` — True/false values
+- `null` — Null values
+- `array` — Ordered lists
+- `object` — Key-value mappings
+
+Types combine with validation keywords and composition to describe your YAML documents.

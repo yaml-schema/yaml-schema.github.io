@@ -2,7 +2,7 @@
 layout: default
 title: Validation
 parent: Features
-nav_order: 3
+nav_order: 4
 ---
 
 # Validation
@@ -405,6 +405,8 @@ contains:
 - everything
 - forty-two
 ```
+
+See [Types](types.md#minitems-and-maxitems) for `minItems`, `maxItems`, `uniqueItems`, and `minContains` / `maxContains` with `contains`.
 
 ## Object Validation
 

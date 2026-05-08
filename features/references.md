@@ -2,7 +2,7 @@
 layout: default
 title: References
 parent: Features
-nav_order: 7
+nav_order: 10
 ---
 
 # References
@@ -43,7 +43,7 @@ age: "not a number"
 
 ## Using `$ref`
 
-The `$ref` keyword references a schema defined in `$defs`. References use JSON Pointer syntax starting with `#/$defs/`:
+The `$ref` keyword points to another schema: same-document pointers (see below) or external URIs/paths that are loaded and resolved during validation.
 
 ```yaml
 $ref: "#/$defs/name"
@@ -53,11 +53,37 @@ When a `$ref` is encountered during validation, the referenced schema is looked 
 
 ## Reference Format
 
-References must be local JSON Pointer references starting with one of:
-- `#/$defs/` - the standard location for definitions
-- `#/definitions/` - an alternate location (for compatibility)
+### Same-document references
 
-External references (URLs or file paths) are not currently supported.
+When `$ref` starts with `#`, the remainder is a JSON Pointer into the **current** root schema. Common locations:
+
+- `#/$defs/<name>` — preferred
+- `#/definitions/<name>` — alternate (compatibility)
+
+### External references
+
+A `$ref` may name another document using a **base URI** (with an optional `#fragment`):
+
+- **`https:`** and **`http:`** — the document is fetched and cached; the fragment selects a subschema with a JSON Pointer (e.g. `#/$defs/foo`).
+- **`file:`** — load from the local filesystem.
+- **Relative references** — resolved against the schema’s **base URI** (where the root schema was loaded from). Relative `$ref` requires that base (typically loading from a file path or URL).
+
+Example using an absolute URI:
+
+```yaml
+type: object
+properties:
+  kind:
+    $ref: "https://yaml-schema.net/yaml-schema.yaml#/$defs/valid_types"
+```
+
+### Circular references
+
+If `$ref` resolution enters a cycle, validation reports an error and does not loop indefinitely, for example:
+
+```
+[1:1] .: Circular $ref detected: #/$defs/a
+```
 
 ## Example: Shared Type Definitions
 
@@ -110,3 +136,4 @@ YAML Schema also supports the following annotation keywords that don't affect va
 - `$schema` - Identifies the meta-schema
 - `title` - A short title for the schema
 - `description` - A longer description of the schema (see [Validation - Descriptions](validation.md#descriptions))
+- `default` - A default value annotation for a property; does not affect validation (see [Conditionals](conditionals.md))

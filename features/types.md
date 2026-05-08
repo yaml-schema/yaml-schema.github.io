@@ -69,6 +69,10 @@ maxLength: 3
 "ABCD"
 ```
 
+`minLength` and `maxLength` count **Unicode scalar values** (code points), not UTF-8 bytes. For example, with `maxLength: 2`, `"αβ"` is valid and `"αβγ"` is too long.
+
+For dates, emails, URIs, and other standard string shapes, see [String formats](formats.md).
+
 ### String Pattern Matching
 
 ```yaml
@@ -482,6 +486,59 @@ contains:
 - everything
 - forty-two
 ```
+
+### minItems and maxItems
+
+```yaml
+# Schema
+type: array
+minItems: 2
+```
+
+Too few elements (including `[]`) fails validation. `maxItems` rejects arrays longer than the limit; an empty array is always allowed when `minItems` is not set.
+
+Combined with `items`:
+
+```yaml
+type: array
+minItems: 2
+maxItems: 4
+items:
+  type: number
+```
+
+### uniqueItems
+
+When `uniqueItems` is `true`, no two elements may be equal (including strings). `false` allows duplicates. Empty and single-element arrays are always valid.
+
+```yaml
+type: array
+uniqueItems: true
+```
+
+### minContains and maxContains
+
+With `contains`, **`minContains`** (default `1`) is the minimum number of elements that must match the `contains` schema; **`maxContains`** caps how many may match.
+
+```yaml
+type: array
+contains:
+  type: number
+minContains: 2
+```
+
+At least two numbers are required somewhere in the array.
+
+```yaml
+type: array
+contains:
+  type: number
+maxContains: 3
+```
+
+At most three elements may be numbers that satisfy `contains`.
+
+Setting **`minContains: 0`** means the `contains` constraint is satisfied even when **no** element matches (the array may have zero matches).
 
 ## Object Type
 
