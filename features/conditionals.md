@@ -102,5 +102,5 @@ You can express several country-specific branches by placing multiple `if` / `th
 
 ## See also
 
-- [Composition](composition.md) for `allOf` with conditionals
-- [References - Annotations](references.md#annotations) for `default`
+- [Composition](composition.html) for `allOf` with conditionals
+- [References - Annotations](references.html#annotations) for `default`

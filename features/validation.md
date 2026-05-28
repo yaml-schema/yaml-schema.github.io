@@ -406,7 +406,7 @@ contains:
 - forty-two
 ```
 
-See [Types](types.md#minitems-and-maxitems) for `minItems`, `maxItems`, `uniqueItems`, and `minContains` / `maxContains` with `contains`.
+See [Types](types.html#minitems-and-maxitems) for `minItems`, `maxItems`, `uniqueItems`, and `minContains` / `maxContains` with `contains`.
 
 ## Object Validation
 

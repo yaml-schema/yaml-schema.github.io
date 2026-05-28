@@ -16,9 +16,9 @@ It also provides a reference implementation and CLI, `ys`, at [https://github.co
 
 If you're new to YAML Schema, we recommend starting with these guides:
 
-1. **[Installation](getting-started/installation.md)** - Install the `ys` command-line tool
-2. **[Basic Usage](getting-started/basic-usage.md)** - Learn the fundamentals of schema validation
-3. **[Features](features/index.md)** - YAML Schema features
+1. **[Installation](getting-started/installation.html)** - Install the `ys` command-line tool
+2. **[Basic Usage](getting-started/basic-usage.html)** - Learn the fundamentals of schema validation
+3. **[Features](features/index.html)** - YAML Schema features
 
 ## Getting Help
 

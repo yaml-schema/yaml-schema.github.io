@@ -107,4 +107,4 @@ Any string value is accepted for validation purposes.
 
 ## See also
 
-- [Types - String type](types.md#string-type) for `pattern`, `minLength`, and `maxLength`.
+- [Types - String type](types.html#string-type) for `pattern`, `minLength`, and `maxLength`.

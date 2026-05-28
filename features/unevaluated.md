@@ -90,5 +90,5 @@ unevaluatedItems:
 
 ## See also
 
-- [Types - Array type](types.md#array-type) for `items`, `prefixItems`, and `contains`
-- [Types - Object type](types.md#object-type) for `properties`, `patternProperties`, and `additionalProperties`
+- [Types - Array type](types.html#array-type) for `items`, `prefixItems`, and `contains`
+- [Types - Object type](types.html#object-type) for `properties`, `patternProperties`, and `additionalProperties`

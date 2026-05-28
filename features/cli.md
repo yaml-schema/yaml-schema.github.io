@@ -11,7 +11,7 @@ YAML Schema provides a command-line tool `ys` for validating YAML files against 
 
 ## Installation
 
-See the [Installation guide](../getting-started/installation.md) for instructions on installing the `ys` command-line tool.
+See the [Installation guide](../getting-started/installation.html) for instructions on installing the `ys` command-line tool.
 
 ## Version
 

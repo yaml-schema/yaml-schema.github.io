@@ -26,4 +26,4 @@ cargo install yaml-schema
 
 Now that you have YAML Schema installed, you can:
 
-- Learn about [basic usage](basic-usage.md)
+- Learn about [basic usage](basic-usage.html)

@@ -181,7 +181,7 @@ This documentation site is licensed under the MIT License. See the LICENSE file 
 
 If you need help with the documentation site:
 
-- Check the [FAQ](docs/faq.md) for common questions
+- Report questions on [GitHub Issues](https://github.com/yaml-schema/yaml-schema/issues)
 - Open an issue on GitHub
 - Contact the maintainers through GitHub discussions
 

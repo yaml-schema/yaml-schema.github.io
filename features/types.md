@@ -71,7 +71,7 @@ maxLength: 3
 
 `minLength` and `maxLength` count **Unicode scalar values** (code points), not UTF-8 bytes. For example, with `maxLength: 2`, `"αβ"` is valid and `"αβγ"` is too long.
 
-For dates, emails, URIs, and other standard string shapes, see [String formats](formats.md).
+For dates, emails, URIs, and other standard string shapes, see [String formats](formats.html).
 
 ### String Pattern Matching
 
@@ -773,6 +773,51 @@ _a_proper_token_001: "value"
 ```
 
 **Error:** `[1:1] .: Property name '-001 invalid' does not match pattern '^[A-Za-z_][A-Za-z0-9_]*$'`
+
+### Property Keys (YAML extension)
+
+Unlike JSON, YAML may use **non-string scalars** as mapping keys (e.g. integers). JSON Schema’s `propertyNames` is defined in terms of **string** property names.
+
+YAML Schema adds **`propertyKeys`**: a normal subschema applied to each mapping **key node** (after YAML parsing), not only its string form.
+
+- Use **`propertyKeys`** for type/kind constraints on keys (e.g. `type: integer`, `enum`).
+- Use **`propertyNames`** (unchanged) when you need a **regex on the string projection** of keys, as in JSON Schema.
+- If **both** appear, **`propertyKeys`** is checked first, then **`propertyNames`** (both must pass).
+
+```yaml
+# Schema: only integer keys
+type: object
+propertyKeys:
+  type: integer
+```
+
+**Valid examples:**
+```yaml
+1: one
+2: two
+```
+
+**Invalid examples:**
+```yaml
+hello: world
+```
+
+Combined with `propertyNames` (string form must still match the pattern after integer keys validate):
+
+```yaml
+type: object
+propertyKeys:
+  type: integer
+propertyNames:
+  pattern: "^a$"
+```
+
+**Invalid examples:**
+```yaml
+1: ok
+```
+
+(Error: `Property name '1' does not match pattern '^a$'`.)
 
 ### Object Size
 

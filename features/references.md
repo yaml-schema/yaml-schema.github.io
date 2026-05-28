@@ -135,5 +135,5 @@ YAML Schema also supports the following annotation keywords that don't affect va
 - `$id` - A URI identifier for the schema
 - `$schema` - Identifies the meta-schema
 - `title` - A short title for the schema
-- `description` - A longer description of the schema (see [Validation - Descriptions](validation.md#descriptions))
-- `default` - A default value annotation for a property; does not affect validation (see [Conditionals](conditionals.md))
+- `description` - A longer description of the schema (see [Validation - Descriptions](validation.html#descriptions))
+- `default` - A default value annotation for a property; does not affect validation (see [Conditionals](conditionals.html))
