@@ -755,7 +755,7 @@ Note: A property with a `null` value is considered not being present.
 
 ### Property Names
 
-`propertyNames` applies a **pattern** to each key’s **string form** (JSON Schema behavior). For constraints on the YAML key value itself (e.g. integer keys), use [`propertyKeys`](#property-keys-yaml-extension) below.
+`propertyNames`, by default, uses an implicit `type: string` and validates a **pattern** to each key’s **string form** (JSON Schema behavior).
 
 ```yaml
 # Schema
@@ -776,22 +776,18 @@ _a_proper_token_001: "value"
 
 **Error:** `[1:1] .: Property name '-001 invalid' does not match pattern '^[A-Za-z_][A-Za-z0-9_]*$'`
 
-### Property Keys (YAML extension)
+### Property Names (YAML-specific)
 
 Unlike JSON, YAML may use **non-string scalars** as mapping keys (e.g. integers). JSON Schema’s `propertyNames` is defined in terms of **string** property names and only supports a `pattern` on that string projection.
 
-**`propertyKeys`** is a YAML Schema extension (not part of JSON Schema): a **subschema** validated against each mapping **key node** as parsed YAML, the same way `items` validates array elements. Any keywords valid in a subschema apply (`type`, `enum`, `const`, composition, and so on).
-
-- Use **`propertyKeys`** for type or value constraints on keys (e.g. `type: integer`, `enum`).
-- Use **`propertyNames`** when you need a **regex on the string form** of keys, as in JSON Schema.
-- If **both** are present, **`propertyKeys`** runs first, then **`propertyNames`**; both must pass.
+In YAML Schema, **`propertyNames`** is extended to support a **subschema** to validate against each mapping **key node** as parsed YAML, the same way `items` validates array elements. Any keywords valid in a subschema apply (`type`, `enum`, `const`, composition, and so on).
 
 #### Integer keys
 
 ```yaml
 # Schema
 type: object
-propertyKeys:
+propertyNames:
   type: integer
 ```
 
@@ -813,7 +809,7 @@ hello: world
 ```yaml
 # Schema
 type: object
-propertyKeys:
+propertyNames:
   type: string
   enum:
     - alpha
@@ -832,26 +828,6 @@ gamma: 3
 ```
 
 **Error:** `[1:1] .gamma: Value "gamma" is not in the enum: ["alpha", "beta"]`
-
-#### With propertyNames
-
-When both keywords are set, keys must satisfy `propertyKeys` **and** match the `propertyNames` pattern on their string form:
-
-```yaml
-# Schema
-type: object
-propertyKeys:
-  type: integer
-propertyNames:
-  pattern: "^a$"
-```
-
-**Invalid examples:**
-```yaml
-1: ok
-```
-
-**Error:** `[1:1] .: Property name '1' does not match pattern '^a$'`
 
 ### Object Size
 
