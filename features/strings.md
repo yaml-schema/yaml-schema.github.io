@@ -1,9 +1,99 @@
 ---
 layout: default
-title: String formats
+title: Strings
 parent: Features
 nav_order: 3
 ---
+
+# Strings
+
+The `string` type validates text values.
+
+### Basic String Validation
+
+```yaml
+# Schema
+type: string
+```
+
+**Valid examples:**
+```yaml
+"Déjà vu"
+```
+
+```yaml
+""
+```
+
+```yaml
+"42"
+```
+
+**Invalid examples:**
+```yaml
+42
+```
+
+```yaml
+true
+```
+
+### String Length Constraints
+
+```yaml
+# Schema
+type: string
+minLength: 2
+maxLength: 3
+```
+
+**Valid examples:**
+```yaml
+"AB"
+```
+
+```yaml
+"ABC"
+```
+
+**Invalid examples:**
+```yaml
+"A"
+```
+
+```yaml
+"ABCD"
+```
+
+`minLength` and `maxLength` count **Unicode scalar values** (code points), not UTF-8 bytes. For example, with `maxLength: 2`, `"αβ"` is valid and `"αβγ"` is too long.
+
+For dates, emails, URIs, and other standard string shapes, see [String formats](formats.html).
+
+### String Pattern Matching
+
+```yaml
+# Schema
+type: string
+pattern: "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+```
+
+**Valid examples:**
+```yaml
+"555-1212"
+```
+
+```yaml
+"(888)555-1212"
+```
+
+**Invalid examples:**
+```yaml
+"(888)555-1212 ext. 532"
+```
+
+```yaml
+"(800)FLOWERS"
+```
 
 # String formats
 
