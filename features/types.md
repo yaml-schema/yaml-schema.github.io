@@ -782,6 +782,8 @@ Unlike JSON, YAML may use **non-string scalars** as mapping keys (e.g. integers)
 
 In YAML Schema, **`propertyNames`** is extended to support a **subschema** to validate against each mapping **key node** as parsed YAML, the same way `items` validates array elements. Any keywords valid in a subschema apply (`type`, `enum`, `const`, composition, and so on).
 
+The reference implementation is the [`yaml-schema`](https://crates.io/crates/yaml-schema) crate and `ys` CLI ([source on GitHub](https://github.com/yaml-schema/yaml-schema)).
+
 #### Integer keys
 
 ```yaml

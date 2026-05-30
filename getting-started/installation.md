@@ -16,10 +16,16 @@ Currently, **yaml-schema** requires Git, Rust and Cargo to build and install: [h
 
 ## Installing YAML Schema
 
-To install the `ys` executable, issue the command:
+To install the `ys` executable from the stable release on [crates.io](https://crates.io/crates/yaml-schema), issue:
 
 ```bash
 cargo install yaml-schema
+```
+
+To build from [source on GitHub](https://github.com/yaml-schema/yaml-schema) instead:
+
+```bash
+cargo install --git https://github.com/yaml-schema/yaml-schema
 ```
 
 ## Next Steps

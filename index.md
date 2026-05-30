@@ -10,7 +10,7 @@ YAML Schema is a tool to define and validate the structure and constraints of YA
 
 The YAML Schema specification is based on JSON Schema ([https://json-schema.org/](https://json-schema.org/)), but expressed as YAML.
 
-It also provides a reference implementation and CLI, `ys`, at [https://github.com/yaml-schema/yaml-schema](https://github.com/yaml-schema/yaml-schema)
+It also provides a reference implementation and CLI, `ys`: the [`yaml-schema`](https://crates.io/crates/yaml-schema) crate ([source on GitHub](https://github.com/yaml-schema/yaml-schema)).
 
 ## Getting Started
 
