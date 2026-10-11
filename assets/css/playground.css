@@ -1,0 +1,165 @@
+.playground {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 50rem) {
+  .playground {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.pg-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.pg-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+}
+
+.pg-panel-title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.pg-status {
+  font-weight: 700;
+}
+
+.pg-status-valid {
+  color: #1f8a4c;
+}
+
+.pg-status-invalid {
+  color: #d02424;
+}
+
+.pg-spinner {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-right: 0.45em;
+  vertical-align: -0.1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: pg-spin 0.7s linear infinite;
+}
+
+@keyframes pg-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pg-spinner {
+    animation-duration: 2s;
+  }
+}
+
+.pg-editor {
+  border: 1px solid #eeebee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pg-editor .cm-editor {
+  height: 24rem;
+  font-size: 0.85rem;
+}
+
+.pg-editor .cm-editor.cm-focused {
+  outline: 2px solid #7253ed;
+  outline-offset: -1px;
+}
+
+/* Error highlights from @codemirror/lint: tint the offending value red, on top of the wavy
+   underline. Hovering shows the error message in a tooltip. */
+.pg-editor .cm-lintRange-error {
+  background-color: rgba(208, 36, 36, 0.16);
+  border-radius: 2px;
+}
+
+.cm-tooltip-lint {
+  max-width: 28rem;
+  font-size: 0.85rem;
+}
+
+.pg-results:empty {
+  display: none;
+}
+
+.pg-results {
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.pg-results.pg-invalid {
+  background: #fbe9e5;
+  color: #8f2c1f;
+}
+
+.pg-results.pg-note {
+  background: #f5f6fa;
+  color: #5c5962;
+}
+
+.main-content .pg-results ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Override just-the-docs' `.main-content ul > li::before` bullets */
+.main-content .pg-results ul > li {
+  margin: 0;
+}
+
+.main-content .pg-results ul > li::before {
+  content: none;
+}
+
+.pg-error {
+  display: flex;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.2rem 0.3rem;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pg-error:hover,
+.pg-error:focus-visible {
+  background: rgba(143, 44, 31, 0.08);
+}
+
+.pg-error-loc {
+  flex: none;
+  font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.pg-version {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: #5c5962;
+}
