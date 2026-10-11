@@ -1,0 +1,5 @@
+# Local development overrides. GitHub Pages applies `remote_theme` from _config.yml, but a plain
+# `jekyll serve` ignores it, so use the installed just-the-docs gem instead:
+#
+#   bundle exec jekyll serve --config _config.yml,_config_dev.yml --livereload
+theme: just-the-docs
