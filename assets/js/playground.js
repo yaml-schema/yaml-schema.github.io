@@ -24,7 +24,7 @@ const [
   import("../wasm/yaml_schema_wasm.js"),
 ]);
 
-// Sample object schema, from the Objects feature page.
+// Sample object schema, adapted from the Objects feature page.
 const SAMPLE_SCHEMA = `type: object
 properties:
   number:
@@ -33,6 +33,7 @@ properties:
     type: string
   street_type:
     enum: [Street, Avenue, Boulevard]
+additionalProperties: false
 `;
 
 const SAMPLE_DOCUMENT = `number: 1600
@@ -40,15 +41,17 @@ street_name: Pennsylvania
 street_type: Avenue
 `;
 
-const PHASE_LABELS = {
-  schema: "Schema error",
-  document: "Document error",
-  validation: "Validation error",
-};
+// Edits re-validate once typing has paused this long
+const DEBOUNCE_MS = 1000;
+// Validation usually takes a few milliseconds; keep the spinner up at least this long so it reads
+// as feedback rather than a flicker
+const MIN_SPINNER_MS = 100;
 
 const validateButton = document.getElementById("pg-validate");
 const schemaResultsEl = document.getElementById("pg-schema-results");
 const documentResultsEl = document.getElementById("pg-document-results");
+const schemaStatusEl = document.getElementById("pg-schema-status");
+const documentStatusEl = document.getElementById("pg-document-status");
 
 function createEditor(parent, doc) {
   return new EditorView({
@@ -59,6 +62,9 @@ function createEditor(parent, doc) {
       keymap.of([{ key: "Mod-Enter", run: () => (runValidation(), true) }]),
       basicSetup,
       yaml(),
+      EditorView.updateListener.of((update) => {
+        if (update.docChanged) scheduleValidation();
+      }),
     ],
   });
 }
@@ -142,23 +148,28 @@ function errorItem(editor, { line, col, text }) {
   return li;
 }
 
-const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
-
 const issueItem = ({ path, line, col, error }) => ({ line, col, text: path ? `.${path}: ${error}` : error });
 
 const fatalItem = ({ line, col, message }) => ({ line, col, text: message });
 
 /**
- * Fills the results box `el` with a `summary` line and a clickable list of `items`
- * ([{ line, col, text }]), and highlights the same items in `editor`.
+ * Shows a panel's validation outcome: a ✓ or ✗ after its title (`status` "valid" or "invalid",
+ * or none when it wasn't validated), the `items` ([{ line, col, text }]) highlighted in `editor`
+ * and listed in the results box `el`, and an optional `note` in place of the list.
  */
-function renderBox(el, editor, { valid, summary, items = [] }) {
-  el.className = `pg-results ${valid ? "pg-valid" : "pg-invalid"}`;
-  const summaryEl = document.createElement("div");
-  summaryEl.className = "pg-results-summary";
-  summaryEl.textContent = summary;
-  el.replaceChildren(summaryEl);
-  if (items.length > 0) {
+function renderPanel(el, statusEl, editor, { status, items = [], note }) {
+  statusEl.hidden = !status;
+  statusEl.className = `pg-status pg-status-${status}`;
+  statusEl.textContent = status === "valid" ? "✓" : "✗";
+  statusEl.title = status === "valid" ? "Valid" : "Invalid";
+  statusEl.setAttribute("aria-label", statusEl.title);
+  statusEl.setAttribute("role", "img");
+
+  el.className = `pg-results ${note ? "pg-note" : "pg-invalid"}`;
+  el.replaceChildren();
+  if (note) {
+    el.textContent = note;
+  } else if (items.length > 0) {
     const list = document.createElement("ul");
     list.append(...items.map((item) => errorItem(editor, item)));
     el.append(list);
@@ -182,9 +193,8 @@ function schemaItems(metaResult, result) {
 
 function renderSchemaResult(metaResult, result) {
   const items = schemaItems(metaResult, result);
-  renderBox(schemaResultsEl, schemaEditor, {
-    valid: items.length === 0,
-    summary: items.length === 0 ? "✓ Schema is valid" : `✗ ${plural(items.length, "schema error")}`,
+  renderPanel(schemaResultsEl, schemaStatusEl, schemaEditor, {
+    status: items.length === 0 ? "valid" : "invalid",
     items,
   });
 }
@@ -192,29 +202,20 @@ function renderSchemaResult(metaResult, result) {
 function renderDocumentResult(result) {
   const { fatal } = result;
   if (fatal?.phase === "schema") {
-    renderBox(documentResultsEl, documentEditor, {
-      valid: false,
-      summary: "Fix the schema errors to validate the document",
+    // The document wasn't validated, so it gets neither a ✓ nor a ✗
+    renderPanel(documentResultsEl, documentStatusEl, documentEditor, {
+      note: "Fix the schema errors to validate the document.",
     });
-  } else if (fatal) {
-    renderBox(documentResultsEl, documentEditor, {
-      valid: false,
-      summary: PHASE_LABELS[fatal.phase] ?? "Error",
-      items: [fatalItem(fatal)],
-    });
-  } else if (result.valid) {
-    renderBox(documentResultsEl, documentEditor, { valid: true, summary: "✓ Document is valid" });
   } else {
-    renderBox(documentResultsEl, documentEditor, {
-      valid: false,
-      summary: `✗ ${plural(result.errors.length, "validation error")}`,
-      items: result.errors.map(issueItem),
+    const items = fatal ? [fatalItem(fatal)] : result.errors.map(issueItem);
+    renderPanel(documentResultsEl, documentStatusEl, documentEditor, {
+      status: items.length === 0 ? "valid" : "invalid",
+      items,
     });
   }
 }
 
-function runValidation() {
-  if (validateButton.disabled) return;
+function validateNow() {
   const schema = schemaEditor.state.doc.toString();
   let result;
   try {
@@ -226,9 +227,60 @@ function runValidation() {
   renderDocumentResult(result);
 }
 
+let ready = false;
+let validating = false;
+// Set when an edit or click arrives mid-validation, so it runs again on the latest text
+let rerun = false;
+let debounceTimer;
+
+function scheduleValidation() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(runValidation, DEBOUNCE_MS);
+}
+
+function setValidating(busy) {
+  validating = busy;
+  validateButton.setAttribute("aria-busy", String(busy));
+  if (busy) {
+    const spinner = document.createElement("span");
+    spinner.className = "pg-spinner";
+    spinner.setAttribute("aria-hidden", "true");
+    validateButton.replaceChildren(spinner, "Validating…");
+  } else {
+    validateButton.replaceChildren("Validate");
+  }
+}
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Resolves after the browser has painted, so the spinner shows before the synchronous wasm call
+// blocks the main thread
+const afterPaint = () => new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve)));
+
+/** Validates now (cancelling any pending debounced run), showing a spinner on the button. */
+async function runValidation() {
+  if (!ready) return;
+  clearTimeout(debounceTimer);
+  if (validating) {
+    rerun = true;
+    return;
+  }
+  setValidating(true);
+  const started = performance.now();
+  await afterPaint();
+  validateNow();
+  await delay(MIN_SPINNER_MS - (performance.now() - started));
+  setValidating(false);
+  if (rerun) {
+    rerun = false;
+    runValidation();
+  }
+}
+
 await wasm.default();
-validateButton.textContent = "Validate";
+ready = true;
 validateButton.disabled = false;
 validateButton.addEventListener("click", runValidation);
+runValidation();
 document.getElementById("pg-version").textContent =
   `yaml-schema v${wasm.version()} (WebAssembly)`;

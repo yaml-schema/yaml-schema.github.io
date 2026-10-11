@@ -20,7 +20,7 @@ via WebAssembly; nothing is sent to a server.
 <div class="playground">
   <section class="pg-panel" aria-labelledby="pg-schema-label">
     <div class="pg-panel-header">
-      <span id="pg-schema-label" class="pg-panel-title">Schema</span>
+      <span class="pg-panel-title"><span id="pg-schema-label">Schema</span><span id="pg-schema-status" class="pg-status" hidden></span></span>
     </div>
     <div id="pg-schema" class="pg-editor"></div>
     <div id="pg-schema-results" class="pg-results" aria-live="polite"></div>
@@ -28,7 +28,7 @@ via WebAssembly; nothing is sent to a server.
 
   <section class="pg-panel" aria-labelledby="pg-document-label">
     <div class="pg-panel-header">
-      <span id="pg-document-label" class="pg-panel-title">Document</span>
+      <span class="pg-panel-title"><span id="pg-document-label">Document</span><span id="pg-document-status" class="pg-status" hidden></span></span>
       <button id="pg-validate" type="button" class="btn btn-primary" disabled>Loading…</button>
     </div>
     <div id="pg-document" class="pg-editor"></div>
