@@ -7,7 +7,6 @@ nav_order: 1
 # YAML Schema
 
 YAML Schema is a tool to define and validate the structure and constraints of YAML documents, in YAML.
-{: .fs-6 .fw-300 }
 
 The YAML Schema specification is based on JSON Schema ([https://json-schema.org/](https://json-schema.org/)), but expressed as YAML.
 
