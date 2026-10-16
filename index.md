@@ -9,12 +9,9 @@ nav_order: 1
 YAML Schema is a tool to define and validate the structure and constraints of YAML documents, in YAML.
 {: .fs-6 .fw-300 }
 
-[Try it in the Playground](playground.html){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[Get started](getting-started/installation.html){: .btn .fs-5 .mb-4 .mb-md-0 }
-
 The YAML Schema specification is based on JSON Schema ([https://json-schema.org/](https://json-schema.org/)), but expressed as YAML.
 
-It also provides a reference implementation and CLI, `ys`: the [`yaml-schema`](https://crates.io/crates/yaml-schema) crate ([source on GitHub](https://github.com/yaml-schema/yaml-schema)).
+It also provides a reference implementation and CLI (`ys`) written in Rust: the [`yaml-schema`](https://crates.io/crates/yaml-schema) crate ([source on GitHub](https://github.com/yaml-schema/yaml-schema)).
 
 ## Try it now
 
